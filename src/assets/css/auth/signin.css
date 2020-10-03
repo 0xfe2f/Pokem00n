@@ -1,0 +1,24 @@
+body {
+    background-color: #f3f3f3;
+}
+
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.w-80 {
+    width: 80%;
+}
+
+.login-box {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.form-group {
+    width: 100%;
+}

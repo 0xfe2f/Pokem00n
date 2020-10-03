@@ -1,0 +1,81 @@
+<h1>{{title}}</h1>
+<form action="/admin/users/{{data._Id}}" role="form" method="POST" id="userForm">
+    <div class="form-group">
+        <label for="inputEmailAddress">Usuário</label>
+        <input id="username" type="text" class="form-control" autocomplete="off" name="username"
+            value="{{data.username}}" required>
+    </div>
+    <div class="form-group">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" class="form-control" autocomplete="off" name="email" value="{{data.email}}"
+            required>
+    </div>
+    <div class="form-group">
+        <label for="inputPassword">Senha</label>
+        <input id="password" type="password" class="form-control" autocomplete="off" name="password">
+    </div>
+    <div class="form-group">
+        <label for="role">Tipo</label>
+        <select name="role" class="form-control" id="role" required>
+            <option value="common">Comum</option>
+            <option value="admin">Administrador</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary my-1">Salvar alterações</button>
+</form>
+{{#section 'jquery'}}
+<script src="/js/dataTable.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+    $(function () {
+
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        $('#role option[value="{{data.role}}"]').attr('selected', 'selected');
+
+        $('#userForm').submit(function (evt) {
+            evt.preventDefault();
+            axios({
+                method: 'post',
+                url: `/admin/users/{{data._id}}`,
+                data: {
+                    email: $(`#email`).val(),
+                    username: $(`#username`).val(),
+                    password: $(`#password`).val(),
+                    role: $(`#role`).val()
+                }
+            }).then((response) => {
+                var data = response.data;
+                if (data.success) {
+                    toastr.success('Usuário alterado com sucesso', 'Sucesso');
+                } else {
+                    toastr.error('Algum erro ocorreu... Tente novamente mais tarde', 'Erro!');
+                }
+            }, (error) => {
+                toastr.error('Algum erro ocorreu... Tente novamente mais tarde', 'Erro!');
+            });
+
+
+        });
+
+    });
+</script>
+
+{{/section}}

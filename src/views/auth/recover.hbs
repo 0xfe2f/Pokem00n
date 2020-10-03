@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Gabriel Kendy e Gabriel Rodrigues">
+    <meta name="robots" content="index">
+
+    <title>Pokem00n - Recuperação de senha</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    <!-- Custom stylesheet -->
+    <link rel="stylesheet" href="/css/auth/recover.css">
+
+</head>
+
+<body>
+    <div class="login-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
+                    <img src="/imgs/logo.png" class="w-80 mb-4">
+                    <form method="POST" action="/auth/recover" id="recoverForm">
+                        <input type="hidden" name="_csrf" id="csrfToken" value="{{csrfToken}}">
+                        <div class="form-group text-center">
+                            <label>Informe-nos seu endereço de e-mail ou username cadastrado para iniciar com o processo de recuperação.</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white px-4 border-md border-right-0">
+                                        <i class="fa fa-user text-muted"></i>
+                                    </span>
+                                </div>
+                                <input name="text" id="data" maxlength="80" type="text" placeholder="Endereço de e-mail ou username"
+                                    class="form-control bg-white border-left border-md" required>
+                            </div>
+                        </div>
+                       
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block">
+                                Recuperar
+                            </button>
+                        </div>
+                        <div class="form-group text-center">
+                            Retornar para <a href="/auth/login">página principal</a>.
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    {{!-- JS Content --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "5000",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        $("#recoverForm").submit(function (e) {
+            e.preventDefault();
+
+            axios({
+                method: 'post',
+                url: "/auth/recover",
+                data: {
+                    data: $(`#data`).val(),
+                    _csrf: $(`#csrfToken`).val(),
+                }
+            }).then((response) => {
+                var data = response.data;
+                if (data.success) {
+                    toastr.info(`Um e-mail contendo uma nova senha foi enviada para ${data.email}. Você poderá alterá-la posteriormente através do seu perfil.`, 'Sucesso');
+
+                } else {
+                    toastr.error(data.message, 'Erro!');
+                }
+            }, (error) => {
+                toastr.error(data.message, 'Erro!');
+            });
+
+        });
+
+    </script>
+</body>
+
+
+</html>
