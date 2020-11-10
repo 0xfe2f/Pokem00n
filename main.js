@@ -70,11 +70,7 @@ app.use("/game", require("./src/controllers/gameController"));
 app.use("/kendy", require("./src/controllers/kendyController"));
 
 app.get('/', async(req, res) => {
-    if (!req.user) {
-        res.redirect(`/auth/login`);
-    } else {
-        res.redirect(`/game`);
-    }
+    return res.redirect(!req.user ? `/auth/login` : `/game`);
 });
 
 // Define porta do servidor HTTP

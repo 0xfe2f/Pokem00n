@@ -1,3 +1,223 @@
-.p-0 {
-    padding: 0 !important;
+@font-face {
+    font-family: 'Atlantis';
+    src: url('/fonts/Atlantis.ttf') format('truetype')
+}
+
+@font-face {
+    font-family: 'Press Start';
+    src: url('/fonts/PressStart.ttf') format('truetype')
+}
+
+* {
+    cursor: none !important;
+}
+
+a {
+    cursor: pointer;
+}
+
+body {
+    overflow: hidden;
+}
+
+.bg-dark {
+    padding-top: 5px !important;
+    background-color: #131313 !important;
+    padding-bottom: 5px !important;
+}
+
+.navbar-brand {
+    font-weight: 600 !important;
+}
+
+svg path {
+    shape-rendering: crispEdges;
+}
+
+.cursor {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 100%;
+    left: 50%;
+    height: 1rem;
+    pointer-events: none;
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s;
+    width: 1rem;
+    z-index: 1000;
+}
+
+.container {
+    /* width: 100%; */
+    top: 47px;
+    left: 0;
+    z-index: 999999;
+    position: absolute;
+    /* margin: 0; */
+    padding: 0;
+}
+
+.intro {
+    background-color: #000000;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    font-family: 'Atlantis';
+}
+
+#canvas {
+    z-index: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.logo {
+    z-index: 4;
+    margin: auto;
+    margin-bottom: 350px;
+}
+
+.text {
+    z-index: 5;
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.text span {
+    margin: auto;
+    color: white;
+    font-size: 30px;
+    font-family: 'Press Start';
+    margin-bottom: 15vh;
+    color: rgba(255, 255, 255, 1);
+    color: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(125, 125, 125, 1) 100%);
+    color: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255, 255, 255, 1)), color-stop(47%, rgba(246, 246, 246, 1)), color-stop(100%, rgba(125, 125, 125, 1)));
+    color: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(125, 125, 125, 1) 100%);
+    color: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(125, 125, 125, 1) 100%);
+    color: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(125, 125, 125, 1) 100%);
+    color: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(125, 125, 125, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#7d7d7d', GradientType=0);
+    animation: blink 2s linear infinite;
+    text-shadow: 4px 4px 0 #000, 4px -4px 0 #000, -4px 4px 0 #000, -4px -4px 0 #000, 4px 0px 0 #000, 0px 4px 0 #000, -4px 0px 0 #000, 0px -4px 0 #000;
+}
+
+.menu {
+    background-color: #505890;
+    width: 100%;
+    font-family: 'Atlantis';
+    height: 100vh;
+    display: none;
+}
+
+.menu ul {
+    list-style-type: none;
+    padding-top: 30px;
+    padding: 30px 30px;
+}
+
+.menu ul li {
+    padding: 10px;
+    padding-left: 40px;
+    background-color: #ffffff;
+    margin-bottom: 30px;
+    font-size: 40px;
+    color: #797978;
+    border-radius: 8px;
+    border: solid 3px #272e38;
+}
+
+.logo img {
+    height: 200px;
+}
+
+.clouds {
+    display: none;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+    position: absolute;
+    animation: MoveUpDown 60s linear infinite;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.background {
+    position: absolute;
+    display: none;
+    background-size: contain;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background-image: url('/imgs/intro-bg.jpg');
+}
+
+.top {
+    animation-fill-mode: forwards;
+    animation-name: moveTop;
+    animation-duration: 1.5s;
+}
+
+.black-bg {
+    animation-fill-mode: forwards;
+    animation-name: toBlack;
+    animation-duration: 300ms;
+}
+
+.white-bg {
+    animation-fill-mode: forwards;
+    animation-name: toWhite;
+    animation-duration: 300ms;
+}
+
+@keyframes MoveUpDown {
+    0%,
+    100% {
+        bottom: 0;
+    }
+    50% {
+        bottom: 120%;
+    }
+}
+
+@keyframes blink {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes moveTop {
+    from {
+        margin-top: auto;
+    }
+    to {
+        margin-bottom: 70vh;
+    }
+}
+
+@keyframes toWhite {
+    from {
+        background-color: black;
+    }
+    to {
+        background-color: white;
+    }
+}
+
+@keyframes toBlack {
+    from {
+        background-color: white;
+    }
+    to {
+        background-color: black !important;
+    }
 }

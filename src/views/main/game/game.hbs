@@ -1,0 +1,208 @@
+<section class="intro">
+  <div class="logo">
+    <img src="/imgs/pixelized-logo.png" />
+  </div>
+  <div class="text">
+    <span>CLICK ANYWHERE TO START</span>
+  </div>
+  <div class="background"></div>
+  <div class="clouds"><img src="/imgs/clouds.png"></div>
+</section>
+
+<section class="menu">
+  <ul>
+    <li>CONTINUE</li>
+    <li>NEW GAME</li>
+  </ul>
+</section>
+
+
+<div class="cursor"></div>
+{{#section 'jquery'}}
+
+
+<script src="http://borismus.github.io/pointer.js/demos/js/Vector2.js"></script>
+<script src="http://borismus.github.io/pointer.js/build/pointer.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"
+  integrity="sha512-L6Z/YtIPQ7eU3BProP34WGU5yIRk7tNHk7vaC2dB1Vy1atz6wl9mCkTPPZ2Rn1qPr+vY2mZ9odZLdGYuaBk7dQ=="
+  crossorigin="anonymous"></script>
+
+<script>
+
+  window.onbeforeunload = function(e) {
+  return "Bye";
+}
+
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  var sound = new Howl({
+    src: ['/mp3/intro.mp3'],
+      loop: true,
+  });
+
+  $(async function () {
+    $('.intro').fadeOut(0);
+    sound.play();
+    await sleep(100);
+    await $('.intro').fadeIn(530).promise();
+    await sleep(1672);
+    $('.intro').addClass('white-bg');
+    await sleep(700);
+    $('.intro').removeClass('white-bg');
+    $('.intro').addClass('black-bg');
+    await sleep(1200);
+    $('.intro').removeClass('black-bg');
+    $('.intro').addClass('white-bg');
+    await sleep(800);
+    $('.intro').removeClass('white-bg');
+    $('.intro').addClass('black-bg');
+    await sleep(600);
+    $('.logo').addClass('top');
+    await sleep(1600);
+    $('.background').css('display', 'block');
+    $('.clouds').css('display', 'block');
+    await sleep(230);
+    $('.text').css('display', 'flex');
+    canChange = true;
+
+  });
+
+  canChange = false;
+
+  // cursor
+
+  $("body").on("mousemove", function (cursor) {
+    var mouse = {
+      x: cursor.clientX + "px",
+      y: cursor.clientY + "px"
+    };
+
+    setTimeout(function () {
+      $(".cursor")
+        .css("left", mouse.x)
+        .css("top", mouse.y);
+    }, 1);
+  });
+
+  // shim layer with setTimeout fallback
+  window.requestAnimFrame = (function () {
+    return window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.oRequestAnimationFrame ||
+      window.msRequestAnimationFrame ||
+      function (callback) {
+        window.setTimeout(callback, 1000 / 60);
+      };
+  })();
+
+  var canvas,
+    c, // c is the canvas' context 2D
+    container;
+
+  setupCanvas();
+  var touches;
+
+
+  canvas.addEventListener('pointerdown', onPointerDown, false);
+  canvas.addEventListener('pointermove', onPointerMove, false);
+  canvas.addEventListener('pointerup', onPointerUp, false);
+  window.onorientationchange = resetCanvas;
+  window.onresize = resetCanvas;
+
+  function resetCanvas(e) {
+    // resize the canvas - but remember - this clears the canvas too.
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    //make sure we scroll to the top left.
+    window.scrollTo(0, 0);
+  }
+
+  function init() {
+    touches = [];
+    requestAnimFrame(draw);
+  }
+
+  async function draw() {
+    c.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (var i = 0; i < touches.length; i++) {
+      var touch = touches[i];
+      c.beginPath();
+
+      c.beginPath();
+      c.strokeStyle = "gray";
+      c.lineWidth = "3";
+      c.lineCap = 'round';
+      c.arc(touch.clientX - 0, touch.clientY - 45, 30, 0, Math.PI * 2, true);
+      c.stroke();
+
+      if (canChange) {     
+        await $('.intro').fadeOut(530).promise();
+        await $('.menu').fadeIn(200).promise();
+        canChange = false;
+      }
+    }
+
+    requestAnimFrame(draw);
+  }
+
+  /*	
+  *	Touch event (e) properties : 
+  *	e.touches: 			Array of touch objects for every finger currently touching the screen
+  *	e.targetTouches: 	Array of touch objects for every finger touching the screen that
+  *						originally touched down on the DOM object the transmitted the event.
+  *	e.changedTouches	Array of touch objects for touches that are changed for this event. 					
+  *						I'm not sure if this would ever be a list of more than one, but would 
+  *						be bad to assume. 
+  *
+  *	Touch objects : 
+  *
+  *	identifier: An identifying number, unique to each touch event
+  *	target: DOM object that broadcast the event
+  *	clientX: X coordinate of touch relative to the viewport (excludes scroll offset)
+  *	clientY: Y coordinate of touch relative to the viewport (excludes scroll offset)
+  *	screenX: Relative to the screen
+  *	screenY: Relative to the screen
+  *	pageX: Relative to the full page (includes scrolling)
+  *	pageY: Relative to the full page (includes scrolling)
+  */
+
+  function onPointerDown(e) {
+    touches = e.getPointerList();
+  }
+
+  function onPointerMove(e) {
+    // Prevent the browser from doing its default thing (scroll, zoom)
+    e.preventDefault();
+    touches = e.getPointerList();
+  }
+
+  function onPointerUp(e) {
+    touches = e.getPointerList();
+  }
+
+
+  function setupCanvas() {
+
+    canvas = document.createElement('canvas');
+    c = canvas.getContext('2d');
+    container = document.createElement('div');
+    container.className = "container";
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(container);
+    container.appendChild(canvas);
+
+    c.strokeStyle = "#ffffff";
+    c.lineWidth = 2;
+  }
+
+
+
+</script>
+{{/section}}
