@@ -1,208 +1,282 @@
-<section class="intro">
-  <div class="logo">
-    <img src="/imgs/pixelized-logo.png" />
-  </div>
-  <div class="text">
-    <span>CLICK ANYWHERE TO START</span>
-  </div>
-  <div class="background"></div>
-  <div class="clouds"><img src="/imgs/clouds.png"></div>
+<section id="game" class="game">
+    <section id="select" class="select">
+        <ul>
+            <li id="save">SAVE</li>
+        </ul>
+    </section>
+    <div id="game-container"></div>
+</section>
+<section id="intro" class="intro">
+    <div class="logo">
+        <img src="/imgs/pixelized-logo.png">
+    </div>
+    <div class="text">
+        <span>CLICK ANYWHERE TO START</span>
+    </div>
+    <div class="background"></div>
+    <div class="clouds">
+        <img src="/imgs/clouds.png">
+    </div>
+</section>
+<section id="menu" class="menu">
+    <ul>
+        {{#each saves}}
+        <li id="save-{{@index}}" class="continue">CONTINUE ({{this.character}}), played for {{this.time}}</li>
+        {{/each}}
+        <li id="new-game">NEW GAME</li>
+    </ul>
 </section>
 
-<section class="menu">
-  <ul>
-    <li>CONTINUE</li>
-    <li>NEW GAME</li>
-  </ul>
+<section id="character-selection" class="character-selection">
+    <img id="brendan" class="char" data-aos="fade-left" data-aos-delay="500" src="/sprites/brendan/brendan-select.png"
+        style="position: absolute; left: 0; bottom: 0;">
+    <img id="may" class="char" data-aos="fade-right" data-aos-delay="500" src="/sprites/may/may-select.png"
+        style="position: absolute; right: 0; bottom: 0;">
+    <div
+        style="position: absolute; top: 40px; display: flex; background-color: transparent; border-radius: 5px; height: 150px; width: 100%;">
+        <span style="margin: auto;font-size: 32px; ">CHOOSE A CHARACTER</span>
+    </div>
 </section>
-
-
-<div class="cursor"></div>
 {{#section 'jquery'}}
-
-
 <script src="http://borismus.github.io/pointer.js/demos/js/Vector2.js"></script>
 <script src="http://borismus.github.io/pointer.js/build/pointer.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"
-  integrity="sha512-L6Z/YtIPQ7eU3BProP34WGU5yIRk7tNHk7vaC2dB1Vy1atz6wl9mCkTPPZ2Rn1qPr+vY2mZ9odZLdGYuaBk7dQ=="
-  crossorigin="anonymous"></script>
-
+    integrity="sha512-L6Z/YtIPQ7eU3BProP34WGU5yIRk7tNHk7vaC2dB1Vy1atz6wl9mCkTPPZ2Rn1qPr+vY2mZ9odZLdGYuaBk7dQ=="
+    crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/phaser@3.16.2/dist/phaser.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"
+    integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ=="
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"
+    integrity="sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw=="
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/game/mouse.js"></script>
 <script>
-
-  window.onbeforeunload = function(e) {
-  return "Bye";
-}
-
-
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-  var sound = new Howl({
-    src: ['/mp3/intro.mp3'],
-      loop: true,
-  });
-
-  $(async function () {
-    $('.intro').fadeOut(0);
-    sound.play();
-    await sleep(100);
-    await $('.intro').fadeIn(530).promise();
-    await sleep(1672);
-    $('.intro').addClass('white-bg');
-    await sleep(700);
-    $('.intro').removeClass('white-bg');
-    $('.intro').addClass('black-bg');
-    await sleep(1200);
-    $('.intro').removeClass('black-bg');
-    $('.intro').addClass('white-bg');
-    await sleep(800);
-    $('.intro').removeClass('white-bg');
-    $('.intro').addClass('black-bg');
-    await sleep(600);
-    $('.logo').addClass('top');
-    await sleep(1600);
-    $('.background').css('display', 'block');
-    $('.clouds').css('display', 'block');
-    await sleep(230);
-    $('.text').css('display', 'flex');
-    canChange = true;
-
-  });
-
-  canChange = false;
-
-  // cursor
-
-  $("body").on("mousemove", function (cursor) {
-    var mouse = {
-      x: cursor.clientX + "px",
-      y: cursor.clientY + "px"
-    };
-
-    setTimeout(function () {
-      $(".cursor")
-        .css("left", mouse.x)
-        .css("top", mouse.y);
-    }, 1);
-  });
-
-  // shim layer with setTimeout fallback
-  window.requestAnimFrame = (function () {
-    return window.requestAnimationFrame ||
-      window.webkitRequestAnimationFrame ||
-      window.mozRequestAnimationFrame ||
-      window.oRequestAnimationFrame ||
-      window.msRequestAnimationFrame ||
-      function (callback) {
-        window.setTimeout(callback, 1000 / 60);
-      };
-  })();
-
-  var canvas,
-    c, // c is the canvas' context 2D
-    container;
-
-  setupCanvas();
-  var touches;
-
-
-  canvas.addEventListener('pointerdown', onPointerDown, false);
-  canvas.addEventListener('pointermove', onPointerMove, false);
-  canvas.addEventListener('pointerup', onPointerUp, false);
-  window.onorientationchange = resetCanvas;
-  window.onresize = resetCanvas;
-
-  function resetCanvas(e) {
-    // resize the canvas - but remember - this clears the canvas too.
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    //make sure we scroll to the top left.
-    window.scrollTo(0, 0);
-  }
-
-  function init() {
-    touches = [];
-    requestAnimFrame(draw);
-  }
-
-  async function draw() {
-    c.clearRect(0, 0, canvas.width, canvas.height);
-
-    for (var i = 0; i < touches.length; i++) {
-      var touch = touches[i];
-      c.beginPath();
-
-      c.beginPath();
-      c.strokeStyle = "gray";
-      c.lineWidth = "3";
-      c.lineCap = 'round';
-      c.arc(touch.clientX - 0, touch.clientY - 45, 30, 0, Math.PI * 2, true);
-      c.stroke();
-
-      if (canChange) {     
-        await $('.intro').fadeOut(530).promise();
-        await $('.menu').fadeIn(200).promise();
-        canChange = false;
-      }
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    requestAnimFrame(draw);
-  }
+    var sound = new Howl({
+        src: ['/mp3/intro.mp3'],
+        loop: true,
+    });
 
-  /*	
-  *	Touch event (e) properties : 
-  *	e.touches: 			Array of touch objects for every finger currently touching the screen
-  *	e.targetTouches: 	Array of touch objects for every finger touching the screen that
-  *						originally touched down on the DOM object the transmitted the event.
-  *	e.changedTouches	Array of touch objects for touches that are changed for this event. 					
-  *						I'm not sure if this would ever be a list of more than one, but would 
-  *						be bad to assume. 
-  *
-  *	Touch objects : 
-  *
-  *	identifier: An identifying number, unique to each touch event
-  *	target: DOM object that broadcast the event
-  *	clientX: X coordinate of touch relative to the viewport (excludes scroll offset)
-  *	clientY: Y coordinate of touch relative to the viewport (excludes scroll offset)
-  *	screenX: Relative to the screen
-  *	screenY: Relative to the screen
-  *	pageX: Relative to the full page (includes scrolling)
-  *	pageY: Relative to the full page (includes scrolling)
-  */
+    var character = ``;
+    var save = ``;
+    var prevX = 0;
+    var prevY = 0;
 
-  function onPointerDown(e) {
-    touches = e.getPointerList();
-  }
+    var saves = {{{ json saves }}};
 
-  function onPointerMove(e) {
-    // Prevent the browser from doing its default thing (scroll, zoom)
-    e.preventDefault();
-    touches = e.getPointerList();
-  }
+    $(async function () {
 
-  function onPointerUp(e) {
-    touches = e.getPointerList();
-  }
+        $('.intro').fadeOut(0);
+        sound.play();
+        await sleep(100);
+        await $('.intro').fadeIn(530).promise();
+        await sleep(1672);
+        $('.intro').addClass('white-bg');
+        await sleep(700);
+        $('.intro').removeClass('white-bg');
+        $('.intro').addClass('black-bg');
+        await sleep(1200);
+        $('.intro').removeClass('black-bg');
+        $('.intro').addClass('white-bg');
+        await sleep(800);
+        $('.intro').removeClass('white-bg');
+        $('.intro').addClass('black-bg');
+        await sleep(600);
+        $('.logo').addClass('top');
+        await sleep(1600);
+        $('.background').css('display', 'block');
+        $('.clouds').css('display', 'block');
+        await sleep(230);
+        $('.text').css('display', 'flex');
+        canChange = true;
+    });
 
+    $('#new-game').click(async function (e) {
+        await $('.menu').fadeOut(530).promise();
 
-  function setupCanvas() {
+        AOS.init({
+            duration: 800,
+            easing: "ease-in-out",
+            once: true
+        });
 
-    canvas = document.createElement('canvas');
-    c = canvas.getContext('2d');
-    container = document.createElement('div');
-    container.className = "container";
+        await $('.character-selection').fadeIn(200).promise();
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    document.body.appendChild(container);
-    container.appendChild(canvas);
+        sound.stop();
+        //game_start();
+    });
 
-    c.strokeStyle = "#ffffff";
-    c.lineWidth = 2;
-  }
+    $('#brendan').click(async function (e) {
+        var result = await axios({
+            method: 'post',
+            url: `/game/new-game`,
+            data: {
+                character: `brendan`
+            }
+        });
 
+        character = `brendan`;
+        save = result.data.save;
 
+        await $('.character-selection').fadeOut(530).promise();
+        await $('.game').fadeIn(200).promise();
 
+        sound.stop();
+        game_start();
+    });
+
+    $('#may').click(async function (e) {
+
+        var result = await axios({
+            method: 'post',
+            url: `/game/new-game`,
+            data: {
+                character: `may`
+            }
+        });
+
+        character = `may`;
+        save = result.data.save;
+
+        await $('.character-selection').fadeOut(530).promise();
+        await $('.game').fadeIn(200).promise();
+
+        sound.stop();
+        game_start();
+    });
+
+    canChange = false;
+
+    // shim layer with setTimeout fallback
+    window.requestAnimFrame = (function () {
+        return window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function (callback) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+    })();
+
+    var canvas, c, container;
+
+    setupCanvas();
+    var touches;
+
+    canvas.addEventListener('pointerdown', onPointerDown, false);
+    canvas.addEventListener('pointermove', onPointerMove, false);
+    canvas.addEventListener('pointerup', onPointerUp, false);
+    window.onorientationchange = resetCanvas;
+    window.onresize = resetCanvas;
+
+    function resetCanvas(e) {
+        // resize the canvas - but remember - this clears the canvas too.
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        //make sure we scroll to the top left.
+        window.scrollTo(0, 0);
+    }
+
+    function init() {
+        touches = [];
+        requestAnimFrame(draw);
+    }
+
+    async function draw() {
+        c.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (var i = 0; i < touches.length; i++) {
+            var touch = touches[i];
+            c.beginPath();
+
+            c.beginPath();
+            c.strokeStyle = "gray";
+            c.lineWidth = "3";
+            c.lineCap = 'round';
+            c.arc(touch.clientX + 10, touch.clientY - 38, 30, 0, Math.PI * 2, true);
+            c.stroke();
+
+            if (canChange) {
+                await $('.intro').fadeOut(530).promise();
+                await $('.menu').fadeIn(200).promise();
+                canChange = false;
+                $('.container').addClass('clickable');
+
+                $(`.continue`).click(async function (e) {
+                    var id = $(this).attr('id').split(`-`)[1];
+                    await axios({
+                        method: 'post',
+                        url: `/game/continue`,
+                        data: {
+                            save: saves[parseInt(id)]._id
+                        }
+                    });
+
+                    character = saves[parseInt(id)].character;
+                    save = saves[parseInt(id)]._id;
+
+                    prevX = saves[parseInt(id)].x;
+                    prevY = saves[parseInt(id)].y;
+
+                    await $('.character-selection').fadeOut(530).promise();
+                    await $('.game').fadeIn(200).promise();
+
+                    sound.stop();
+                    game_start();
+
+                });
+            }
+        }
+
+        requestAnimFrame(draw);
+    }
+
+    function onPointerDown(e) {
+        try {
+            touches = e.getPointerList();
+        } catch (ex) {
+            /* */
+        }
+    }
+
+    function onPointerMove(e) {
+        e.preventDefault();
+        try {
+            touches = e.getPointerList();
+        } catch (ex) {
+            /* */
+        }
+    }
+
+    function onPointerUp(e) {
+        try {
+            touches = e.getPointerList();
+        } catch (ex) { /* */ }
+    }
+
+    function setupCanvas() {
+
+        canvas = document.createElement('canvas');
+        c = canvas.getContext('2d');
+        container = document.createElement('div');
+        container.className = "container";
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        document.body.appendChild(container);
+        container.appendChild(canvas);
+
+        c.strokeStyle = "#ffffff";
+        c.lineWidth = 2;
+    }
 </script>
+<script src="/js/game/gameScene.js"></script>
+
 {{/section}}

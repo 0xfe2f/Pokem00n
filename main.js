@@ -4,19 +4,17 @@ const passport = require("passport");
 // importing keys from local file
 const keys = require("./config/keys");
 
-// middlewares
 const expressMongoDb = require('express-mongo-db');
-
 const cookieSession = require("cookie-session");
 const cookieParser = require('cookie-parser');
 
 const cors = require("cors");
 const csrf = require('csurf');
-const procexss = require('node-procexss')
-const helmet = require("helmet");
+// const procexss = require('node-procexss')
+// const helmet = require("helmet");
 
 const flash = require('connect-flash');
-const compression = require("compression");
+// const compression = require("compression");
 const bodyParser = require("body-parser");
 const requestIp = require('request-ip');
 
@@ -32,9 +30,6 @@ app.set("views", "src/views");
 app.set("view engine", ".hbs");
 app.engine(".hbs", require("./config/handlebars"));
 
-// Inicializa middlewares.
-const csrfProtection = csrf({ cookie: true })
-
 app.use(cors({
     origin: 'http://localhost:8002',
     optionsSuccessStatus: 200
@@ -49,6 +44,8 @@ app.use(requestIp.mw());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({}));
+
+const csrfProtection = csrf({ cookie: true })
 
 // Define uso dos cookies
 app.use(
@@ -73,7 +70,10 @@ app.get('/', async(req, res) => {
     return res.redirect(!req.user ? `/auth/login` : `/game`);
 });
 
-// Define porta do servidor HTTP
-const PORT = process.env.PORT || 8002;
-// Inicia escuta na porta predefinida
-app.listen(PORT, () => { console.log(`[!] Servidor web iniciado na porta ${PORT}`); })
+var http = require('http').createServer(app);
+require('./multiplayer')(http);
+
+const PORT = process.env.PORT || 3000;
+http.listen(PORT, () => {
+    console.log(`[!] Web server started on port ${PORT}`);
+});

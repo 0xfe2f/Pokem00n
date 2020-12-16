@@ -21,7 +21,7 @@
     {{{_sections.css}}}
 </head>
 
-<body onload = "init()">
+<body onload="init()">
     <div class="wrapper">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand text-bold" href="#">Pokém00n</a>
@@ -54,10 +54,10 @@
 
     </div>
 
-
     {{!-- JS Content --}}
-    <script src="https://code.jquery.com/jquery-3.3.1.js"
-        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+        integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+        crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
         integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
         crossorigin="anonymous"></script>
@@ -65,7 +65,14 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
 
-    {{{_sections.jquery}}}   
+    {{{_sections.jquery}}}
+
+    <script>
+        // prevent user to leave abruptly
+        window.onbeforeunload = function (e) {
+            return "Bye";
+        }
+    </script>
 </body>
 
 

@@ -4,7 +4,8 @@
     "description": "",
     "main": "main.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test:coverage": "nyc mocha --config ./exemplo/.mocharc.js",
+        "test:mutation": "stryker run ./exemplo/stryker.conf.js"
     },
     "keywords": [
         "rpg",
@@ -13,9 +14,14 @@
     "author": "Gabriel Rodrigues and Gabriel Kendy",
     "license": "ISC",
     "dependencies": {
+        "@stryker-mutator/core": "^3.3.1",
+        "@stryker-mutator/javascript-mutator": "^3.3.1",
+        "@stryker-mutator/mocha-framework": "^3.3.1",
+        "@stryker-mutator/mocha-runner": "^3.3.1",
         "axios": "^0.20.0",
         "bcrypt": "^5.0.0",
         "body-parser": "^1.19.0",
+        "chai": "4.2.0",
         "compression": "^1.7.4",
         "connect-flash": "^0.1.1",
         "cookie-parser": "^1.4.5",
@@ -27,11 +33,14 @@
         "express-mongo-db": "^2.0.4",
         "handlebars": "^4.7.6",
         "helmet": "^4.1.1",
+        "mocha": "8.1.1",
         "moment": "^2.29.0",
         "mongodb": "^3.6.2",
         "node-procexss": "^0.1.2",
+        "nyc": "15.1.0",
         "passport": "^0.4.1",
         "passport-local": "^1.0.0",
-        "request-ip": "^2.1.3"
+        "request-ip": "^2.1.3",
+        "socket.io": "^3.0.4"
     }
 }
