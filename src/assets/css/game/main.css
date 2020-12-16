@@ -12,6 +12,10 @@ a {
     cursor: pointer;
 }
 
+#slider {
+    background: linear-gradient(to right, #82CFD0 0%, #82CFD0 50%, #fff 50%, #fff 100%);
+}
+
 section {
     -webkit-touch-callout: none;
     /* iOS Safari */
@@ -142,6 +146,8 @@ svg path {
     font-family: "Atlantis";
     height: 100vh;
     display: none;
+    overflow-y: scroll;
+    padding-bottom: 20px;
 }
 
 .select {
@@ -286,17 +292,17 @@ svg path {
     padding-left: 30px;
     background-color: #ffffff;
     font-size: 60px;
-    color: #5d5d5d;
+    color: #606060;
+    text-shadow: 2px 2px 0px #d6d6cf;
 }
 
 .select ul li:after {
-    content: '➤';
+    content: '▶';
     position: absolute;
-    font-size: 30px;
-    color: black;
+    font-size: 40px;
     opacity: 0;
-    color: #545151;
-    top: 29px;
+    color: #606060;
+    margin-top: 20px;
     left: 10px;
     transition: 0.2s;
 }
@@ -309,12 +315,16 @@ svg path {
 .menu ul li {
     padding: 10px;
     padding-left: 40px;
-    background-color: #ffffff;
+    background-color: #c8c8c8;
     margin-bottom: 30px;
     font-size: 40px;
-    color: #797978;
+    text-shadow: 2px 2px 0px #d6d6cf;
     border-radius: 8px;
     border: solid 3px #272e38;
+}
+
+.menu ul li:hover {
+    background-color: #ffffff;
 }
 
 .logo img {
@@ -357,6 +367,79 @@ svg path {
 }
 
 .white-bg {
+    animation-fill-mode: forwards;
+    animation-name: toWhite;
+    animation-duration: 300ms;
+}
+
+@keyframes MoveUpDown {
+    0%,
+    100% {
+        bottom: 0;
+    }
+    50% {
+        bottom: 120%;
+    }
+}
+
+@keyframes blink {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes moveTop {
+    from {
+        margin-top: auto;
+    }
+    to {
+        margin-bottom: 70vh;
+    }
+}
+
+@keyframes toWhite {
+    from {
+        background-color: black;
+    }
+    to {
+        background-color: white;
+    }
+}
+
+@keyframes toBlack {
+    from {
+        background-color: white;
+    }
+    to {
+        background-color: black !important;
+    }
+}
+
+
+/* --- Game --- */
+
+#game-container {
+    margin: 0;
+    padding: 0;
+}
+
+#game-container {
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#game-container>canvas {
+    border-radius: 5px;
+}
+
+white-bg {
     animation-fill-mode: forwards;
     animation-name: toWhite;
     animation-duration: 300ms;

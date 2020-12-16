@@ -31,6 +31,7 @@ function game_start() {
     sound = new Howl({
         src: ['/mp3/littleroot.mp3'],
         loop: true,
+        volume: 0.5
     });
 
     game = new Phaser.Game(config);
@@ -248,8 +249,22 @@ function addPlayer(self, playerInfo, follow = false) {
 
     self.physics.add.collider(player, self.worldLayer);
 
+    $('#reload').click(async function(e) {
+        tick();
+        location.reload();
+
+    });
+
+    $('#exit').click(async function(e) {
+        tick();
+        window.close();
+
+    });
+
     $('#save').click(async function(e) {
         sound.stop();
+        tick();
+
         var result = await axios({
             method: 'post',
             url: `/game/save-game`,
@@ -262,6 +277,9 @@ function addPlayer(self, playerInfo, follow = false) {
 
         setTimeout(() => {
             $('#select').removeClass('shown');
+
+            tick();
+
             sound.play();
 
         }, 400)
@@ -278,7 +296,7 @@ function addPlayer(self, playerInfo, follow = false) {
         self.cursors = self.input.keyboard.createCursorKeys();
 
         self.input.keyboard.on("keydown_ENTER", event => {
-            console.log($(`#select`).hasClass(`shown`));
+            tick();
             if ($(`#select`).hasClass(`shown`)) {
                 console.log(`hide`);
                 $(`#select`).removeClass(`shown`);

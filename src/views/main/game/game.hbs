@@ -2,6 +2,8 @@
     <section id="select" class="select">
         <ul>
             <li id="save">SAVE</li>
+            <li id="reload">RELOAD</li>
+            {{!-- <li id="exit">EXIT</li> --}}
         </ul>
     </section>
     <div id="game-container"></div>
@@ -60,6 +62,7 @@
     var sound = new Howl({
         src: ['/mp3/intro.mp3'],
         loop: true,
+        volume: 0.5
     });
 
     var character = ``;
@@ -68,6 +71,14 @@
     var prevY = 0;
 
     var saves = {{{ json saves }}};
+    var volume = 0.5;
+
+    function tick() {
+        new Howl({
+            src: ['/mp3/tick.m4a'],
+            volume: volume
+        }).play();
+    }
 
     $(async function () {
 
@@ -96,7 +107,18 @@
         canChange = true;
     });
 
+    updateVolume = function (value) {
+        sound.volume(value);
+    }
+
+    $("#slider").on("change", function () { updateVolume(this.value / 100) });
+
+
+
     $('#new-game').click(async function (e) {
+
+        tick();
+
         await $('.menu').fadeOut(530).promise();
 
         AOS.init({
@@ -108,10 +130,19 @@
         await $('.character-selection').fadeIn(200).promise();
 
         sound.stop();
+        sound = new Howl({
+            src: ['/mp3/char.mp3'],
+            loop: true,
+            volume: 0.5
+        });
+        sound.play();
         //game_start();
     });
 
     $('#brendan').click(async function (e) {
+
+        tick();
+
         var result = await axios({
             method: 'post',
             url: `/game/new-game`,
@@ -131,6 +162,8 @@
     });
 
     $('#may').click(async function (e) {
+
+        tick();
 
         var result = await axios({
             method: 'post',
@@ -210,6 +243,8 @@
                 $('.container').addClass('clickable');
 
                 $(`.continue`).click(async function (e) {
+                    tick();
+
                     var id = $(this).attr('id').split(`-`)[1];
                     await axios({
                         method: 'post',
