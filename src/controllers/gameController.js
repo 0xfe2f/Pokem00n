@@ -49,7 +49,7 @@ gameController.post('/save-game', async(req, res) => {
 
     var save = await req.db.collection('saves').findOne({ _id: new ObjectId(req.body.save) });
     var lastTime = parseInt(moment().valueOf() + "") - parseInt(save.lastTime + "");
-    console.log(lastTime);
+    // console.log(lastTime);
     var time = parseInt(save.time + "") + lastTime;
 
     await req.db.collection('saves').updateOne({
@@ -67,7 +67,7 @@ gameController.post('/save-game', async(req, res) => {
 
 gameController.post('/continue', async(req, res) => {
 
-    console.log(req.body.save);
+    // console.log(req.body.save);
 
     await req.db.collection('saves').updateOne({
         _id: new ObjectId(req.body.save)
