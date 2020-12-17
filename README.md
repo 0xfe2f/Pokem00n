@@ -8,7 +8,7 @@
 
 ---
 
-Pokém00n is a game developed using MongoDB as database, HTML, CSS and Javascript with the support of the Handlebars view engine for the frontend, and Phaser.JS, Node.JS and Socket.IO for the backend based on the Pokémon™ series that seeks to revive and reinvent the gameplay experience of the franchise games for portable consoles through an interface built for web. This project was developed to a project for the course ACH2006 - Information Systems Engineering I at USP.
+Pokém00n is a game developed using MongoDB as database, HTML, CSS and Javascript with the support of the Handlebars view engine for the frontend (we also used Phaser.JS library as game engine), and both Node.JS and Socket.IO for the backend based on the Pokémon™ series that seeks to revive and reinvent the gameplay experience of the franchise games for portable consoles through an interface built for web. This project was developed to a project for the course ACH2006 - Information Systems Engineering I at USP.
 
 ![](game.gif)
 
