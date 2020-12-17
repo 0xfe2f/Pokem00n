@@ -3,7 +3,7 @@
   <img src="/src/assets/imgs/logo.png" width="372" height="120" /><br />
 </p>
 <p align="center">
-  🎮 Web game based on Pokémon™ series for the web 🎮
+  🎮 Game based on Pokémon™ series for the web 🎮
 </p>
 
 ---
