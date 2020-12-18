@@ -20,3 +20,10 @@ Pokém00n complete installation depends on both having a MongoDB service running
 npm install # to install all npm dependencies
 node index.js # to actually run the app
 ```
+
+## Authors
+Gabriel Rodrigues Santos and Gabriel Kendy Faria Komatsu.
+
+## TODO
+1. Continue implementing the logic of the game: add Pokémon sprites, battle scenes, other cities, etc.
+2. Improve aspects of information sharing between users (improve the script that runs a mini Socket.IO service)
